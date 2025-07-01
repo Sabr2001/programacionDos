@@ -14,10 +14,17 @@ import customtkinter
 
 customtkinter.set_appearance_mode("dark")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("green")  # Themes: "blue" (standard), "green", "dark-blue"
+
+
+#================================= Variables y Datos Auxiliares =======================#
+clientes = [
+    {"nombre":"Santiago", "apellido":"Bonilla", "id":"1", "email":"sbr@hotmail.com", "mascota":"Rufus", "codigo":"ABC123"},
+    {"nombre":"Rachell", "apellido":"McAdams","id":"2", "email":"rmcadams@hotmail.com", "mascota":"Fifi", "codigo":"DEF456"}
+]
+ejecucion_carga_clientes = False
 #################################INICIO METODOS Y FUNCIONES######################################################
 
 #
-
 def pestana_por_defecto(name):
     boton_inicio.configure(fg_color="gray" if name == "inicio" else "transparent")
     boton_pestana1.configure(fg_color="gray" if name == "pestana1" else "transparent")
@@ -27,14 +34,22 @@ def pestana_por_defecto(name):
 
     if name == "inicio":
         pestana_inicio.grid(row=0, column=1, sticky="nsew")
+        colocar_logo(pestana_inicio, imagen_tk)
+        colocar_logo(pestana1, imagen_tk)
+        colocar_logo(pestana2, imagen_tk)
+        colocar_logo(pestana3, imagen_tk)
+
     else:
         pestana_inicio.grid_forget()
 
     if name == "pestana1":
+        global ejecucion_carga_clientes
         pestana1.grid(row=0, column=1, sticky="nsew")
+        if ejecucion_carga_clientes == False:
+            index_clientes(pestana1)
+            ejecucion_carga_clientes = True
     else:
         pestana1.grid_forget()
-
     if name == "pestana2":
         pestana2.grid(row=0, column=1, sticky="nsew")
     else:
@@ -56,19 +71,27 @@ def redirigir_a_pestana2():
 def redirigir_a_pestana3():
     pestana_por_defecto("pestana3")
 
+def index_clientes(root):
+    tree = ttk.Treeview(root, columns=("ID", "Nombre","Apellido", "Correo", "Mascota","Codigo"), show='headings')
+    tree.heading("ID", text="ID")
+    tree.heading("Nombre", text="Nombre")
+    tree.heading("Apellido", text="Apellido")
+    tree.heading("Correo", text="Correo")
+    tree.heading("Mascota", text="Mascota")
+    tree.heading("Codigo", text="Código de Mascota")
 
+    for cliente in clientes:
+        tree.insert("", "end", values=(cliente["id"],cliente["nombre"],cliente["apellido"],cliente["email"], cliente["mascota"],cliente["codigo"]))
+
+    tree.pack(fill="both", expand=True)
 
 
 # Funcion para Recibir el cambio de tamaño de la ventana.
-def resize_imagen(event):
-
-    width = event.width
-    height = event.height
-
-    imagen_redimensionada= imagen_original.resize((width, height), Image.Resampling.LANCZOS)
-    imagen_tk = ImageTk.PhotoImage(imagen_redimensionada)
-    canvas.create_image(0, 0, anchor='nw', image=imagen_tk)
-    canvas.image = imagen_tk  # evitar que se libere de memoria
+def colocar_logo(pestana, imagen):
+                         
+    label_imagen = tk.Label(pestana, image=imagen, bg="#2b2b2b")
+    label_imagen.image = imagen
+    label_imagen.place(relx=1.0, y=5, anchor="ne")
 
     
 #################################FIN METODOS Y FUNCIONES########################################################
@@ -85,6 +108,7 @@ programa.grid_columnconfigure(1, weight=1)
 #icono de la Ventana
 programa.iconbitmap(r'C:\Users\Santiago\Desktop\Ing. en Sistemas - UIA\3er CUATRIMESTRE\PROGRAMACION II\prograDos\programacionDos\assets\icopet.ico')
 #======================================================================================#
+
 
 
 #========================= INICIO  MARCO LATERAL ===============================#
@@ -130,49 +154,12 @@ pestana3 = customtkinter.CTkFrame(programa, corner_radius=0)
 label_3 = customtkinter.CTkLabel(pestana3, text="Servicios", font=("Arial", 18))
 label_3.pack(pady=50)
 
-redirigir_a_inicio()
-
 
 imagen_original = Image.open(r'C:\Users\Santiago\Desktop\Ing. en Sistemas - UIA\3er CUATRIMESTRE\PROGRAMACION II\prograDos\programacionDos\assets\petmatepng1.png')
-imagen_redimensionada = imagen_original.resize((200, 200), Image.Resampling.LANCZOS) ## Se redimensiona la imagen usando la libreria PIL, y su funcion resize.
+imagen_redimensionada = imagen_original.resize((150, 150), Image.Resampling.LANCZOS) ## Se redimensiona la imagen usando la libreria PIL, y su funcion resize.
 imagen_tk = ImageTk.PhotoImage(imagen_redimensionada)                                ## Se asigna la imagen redimensionada
-label_imagen = tk.Label(pestana_inicio, image=imagen_tk, bg="#2b2b2b")
-label_imagen.image = imagen_tk
-label_imagen.grid(row=0, column=0, sticky="ne", pady=50)
-# Crear los marcos (pestañas)
-# pestana1 = customtkinter.CTkFrame(programa)
-# pestana2 = customtkinter.CTkFrame(notebook)
-# pestana3 = customtkinter.CTkFrame(notebook)
-# pestana4 = customtkinter.CTkFrame(notebook)
 
-# Agregar las pestañas al notebook  
-# notebook.add(pestana1, text='Inicio')
-# notebook.add(pestana2, text='Clientes')
-# notebook.add(pestana3, text='Inventario')
-# notebook.add(pestana4, text='Servicios')
-
-
-# --- PESTAÑA 1: Imagen + botón sobre Canvas ---
-#canvas = tk.Canvas(pestana1, width=600, height=600, highlightthickness=0)
-#canvas.pack(fill="both", expand=True)
-
-# Poner imagen como fondo
-#canvas.create_image(0, 0, anchor='nw', image=imagen_tk)
-#canvas.image = imagen_tk  # evitar que se libere de memoria
-
-# Botón que cambia a la pestaña 2
-# etiqueta_bienvenida = tk.Label(
-#     programa,
-#     text="!Bienvenido a Petmate!",
-#     fg="white",
-#     bg = "#242424",
-#     font=("TkHeadingFont", 24, "bold"))
-# etiqueta_bienvenida.place(x=350, y=50)    
-
-# Contenido de la pestaña 2
-# label = ttk.Label(pestana2, text="¡Estás en la pestaña 2!")
-
-#canvas.bind("<Configure>",resize_imagen)
+redirigir_a_inicio()
 
 # Ejecutar la aplicación
 programa.mainloop()
