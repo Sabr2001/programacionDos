@@ -60,14 +60,10 @@ def pestana_por_defecto(name):
         global ejecucio_carga_inventario
         pestana2.grid(row=0, column=1, sticky="nsew")
         if ejecucio_carga_inventario == False:
-            for widget in pestana2.winfo_children():
-                widget.destroy()
-                
-        label_2 = customtkinter.CTkLabel(pestana2, text="inventario", font=("Arial", 18))
-        label_2.pack(pady=10)
+            index_inventario(pestana2)
+            ejecucio_carga_inventario = True
         
-        index_inventario(pestana2)
-        ejecucio_carga_inventario = True
+
         
     else:
         pestana2.grid_forget()
@@ -154,7 +150,7 @@ programa.geometry("700x450")
 programa.grid_rowconfigure(0, weight=1)
 programa.grid_columnconfigure(1, weight=1)
 #icono de la Ventana
-programa.iconbitmap(r'C:\Users\srrik\OneDrive\Documentos\Investigacionprogra\programacionDos\assets\icopet.ico')
+programa.iconbitmap(r'C:\Users\Santiago\Desktop\Ing. en Sistemas - UIA\3er CUATRIMESTRE\PROGRAMACION II\prograDos\programacionDos\assets\icopet.ico')
 #======================================================================================#
 
 
@@ -203,7 +199,7 @@ label_3 = customtkinter.CTkLabel(pestana3, text="Servicios", font=("Arial", 18))
 label_3.pack(pady=50)
 
 
-imagen_original = Image.open(r'C:\Users\srrik\OneDrive\Documentos\investigacionprogra\programacionDos\assets\petmatepng1.png')
+imagen_original = Image.open(r'C:\Users\Santiago\Desktop\Ing. en Sistemas - UIA\3er CUATRIMESTRE\PROGRAMACION II\prograDos\programacionDos\assets\petmatepng1.png')
 imagen_redimensionada = imagen_original.resize((150, 150), Image.Resampling.LANCZOS) ## Se redimensiona la imagen usando la libreria PIL, y su funcion resize.
 imagen_tk = ImageTk.PhotoImage(imagen_redimensionada)                                ## Se asigna la imagen redimensionada
 
