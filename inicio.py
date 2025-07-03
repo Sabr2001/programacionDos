@@ -22,6 +22,13 @@ clientes = [
     {"nombre":"Rachell", "apellido":"McAdams","id":"2", "email":"rmcadams@hotmail.com", "mascota":"Fifi", "codigo":"DEF456"}
 ]
 ejecucion_carga_clientes = False
+
+inventario = [
+    {"id":"1", "nombre": "alimento perros", "categoria": "alimentos", "precio": "7.000", "cantidad": "4", "proveedor": "DogChow"},
+    {"id":"3", "nombre": "hueso de juguete", "categoria": "juguetes", "precio": "2.500", "cantidad": "12", "proveedor": "DogChow"},
+    {"id":"45", "nombre": "collar", "categoria": "accesorios", "precio": "8.000", "cantidad": "7", "proveedor": "DogChow"},
+]
+ejecucio_carga_inventario = False
 #################################INICIO METODOS Y FUNCIONES######################################################
 
 #
@@ -30,7 +37,6 @@ def pestana_por_defecto(name):
     boton_pestana1.configure(fg_color="gray" if name == "pestana1" else "transparent")
     boton_pestana2.configure(fg_color="gray" if name == "pestana2" else "transparent")
     boton_pestana3.configure(fg_color="gray" if name == "pestana3" else "transparent")
- 
 
     if name == "inicio":
         pestana_inicio.grid(row=0, column=1, sticky="nsew")
@@ -51,7 +57,14 @@ def pestana_por_defecto(name):
     else:
         pestana1.grid_forget()
     if name == "pestana2":
+        global ejecucio_carga_inventario
         pestana2.grid(row=0, column=1, sticky="nsew")
+        if ejecucio_carga_inventario == False:
+            index_inventario(pestana2)
+            ejecucio_carga_inventario = True
+        
+
+        
     else:
         pestana2.grid_forget()
     if name == "pestana3":
@@ -88,12 +101,43 @@ def index_clientes(root):
 
 # Funcion para Recibir el cambio de tamaño de la ventana.
 def colocar_logo(pestana, imagen):
-                         
+                    
     label_imagen = tk.Label(pestana, image=imagen, bg="#2b2b2b")
     label_imagen.image = imagen
     label_imagen.place(relx=1.0, y=5, anchor="ne")
 
+#funcion del inventario
+def index_inventario(root):
+    tree = ttk.Treeview(root, columns=("ID", "nombre", "categoria", "precio", "cantidad", "proveedor"), show='headings')
+    tree.heading("ID", text="ID")
+    tree.heading("nombre", text="nombre")
+    tree.heading("categoria", text="categoria")
+    tree.heading("precio", text="precio")
+    tree.heading("cantidad", text="cantidad")
+    tree.heading("proveedor", text="proveedor")
     
+    tree.column("ID", width=50, anchor="center")
+    tree.column("nombre", width=150)
+    tree.column("categoria", width=100)
+    tree.column("precio", width=50, anchor="center")
+    tree.column("cantidad", width=50, anchor="center")
+    tree.column("proveedor", width=150)
+    
+    for producto in inventario:
+        tree.insert("", "end", values=(
+            producto["id"],
+            producto["nombre"],
+            producto["categoria"],
+            producto["precio"],
+            producto["cantidad"],
+            producto["proveedor"]
+        ))
+        
+    scrollbar = ttk.Scrollbar(root, orient="vertical", command=tree.yview)
+    scrollbar.pack(side="right", fill="y")
+    tree.configure(yscrollcommand=scrollbar.set)
+    
+    tree.pack(fill="both", expand=True, padx=10, pady=10)
 #################################FIN METODOS Y FUNCIONES########################################################
 
 ############################# Inicio Estructura y vista de la Ventana##############################################
