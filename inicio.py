@@ -138,6 +138,34 @@ def index_inventario(root):
     tree.configure(yscrollcommand=scrollbar.set)
     
     tree.pack(fill="both", expand=True, padx=10, pady=10)
+    
+#funcion del panel de Servicios
+def index_servicios(root):
+    servicios = [
+        {"id": "1", "tipo": "Peluquería", "precio": "₡10.000", "duracion": "45 min"},
+        {"id": "2", "tipo": "Consulta General", "precio": "₡15.000", "duracion": "30 min"},
+        {"id": "3", "tipo": "Venta de Accesorios", "precio": "₡Variable", "duracion": "N/A"},
+        {"id": "4", "tipo": "Venta de Medicinas", "precio": "₡Variable", "duracion": "N/A"},
+    ]
+
+    tree = ttk.Treeview(root, columns=("ID", "Servicio", "Precio", "Duración"), show="headings")
+    tree.heading("ID", text="ID")
+    tree.heading("Servicio", text="Servicio")
+    tree.heading("Precio", text="Precio")
+    tree.heading("Duración", text="Duración")
+
+    tree.column("ID", width=50, anchor="center")
+    tree.column("Servicio", width=200)
+    tree.column("Precio", width=100, anchor="center")
+    tree.column("Duración", width=100, anchor="center")
+
+    for servicio in servicios:
+        tree.insert("", "end", values=(servicio["id"], servicio["tipo"], servicio["precio"], servicio["duracion"]))
+
+    scrollbar = ttk.Scrollbar(root, orient="vertical", command=tree.yview)
+    scrollbar.pack(side="right", fill="y")
+    tree.configure(yscrollcommand=scrollbar.set)
+    tree.pack(fill="both", expand=True, padx=10, pady=10) 
 #################################FIN METODOS Y FUNCIONES########################################################
 
 ############################# Inicio Estructura y vista de la Ventana##############################################
